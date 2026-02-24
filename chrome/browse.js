@@ -75,23 +75,6 @@ let sortStack = []; // Track multi-level sorting: [{field: 'name', direction: 'a
 let selectedConversations = new Set(); // Track selected conversation IDs
 let lastCheckedIndex = null; // Track last checked checkbox for shift+click range selection
 
-// Model name mappings
-const MODEL_DISPLAY_NAMES = {
-  'claude-3-sonnet-20240229': 'Claude Sonnet 3',
-  'claude-3-opus-20240229': 'Claude Opus 3',
-  'claude-3-haiku-20240307': 'Claude Haiku 3',
-  'claude-3-5-sonnet-20240620': 'Claude Sonnet 3.5',
-  'claude-3-5-haiku-20241022': 'Claude Haiku 3.5',
-  'claude-3-5-sonnet-20241022': 'Claude Sonnet 3.5',
-  'claude-3-7-sonnet-20250219': 'Claude Sonnet 3.7',
-  'claude-sonnet-4-20250514': 'Claude Sonnet 4',
-  'claude-opus-4-20250514': 'Claude Opus 4',
-  'claude-opus-4-1-20250805': 'Claude Opus 4.1',
-  'claude-opus-4-5-20251101': 'Claude Opus 4.5',
-  'claude-sonnet-4-5-20250929': 'Claude Sonnet 4.5',
-  'claude-haiku-4-5-20251001': 'Claude Haiku 4.5'
-};
-
 // Default model timeline for null models
 // Each entry represents when that model became the default
 const DEFAULT_MODEL_TIMELINE = [
@@ -100,7 +83,8 @@ const DEFAULT_MODEL_TIMELINE = [
   { date: new Date('2024-10-22'), model: 'claude-3-5-sonnet-20241022' }, // Starting October 22, 2024
   { date: new Date('2025-02-24'), model: 'claude-3-7-sonnet-20250219' }, // Starting February 24, 2025
   { date: new Date('2025-05-22'), model: 'claude-sonnet-4-20250514' }, // Starting May 22, 2025
-  { date: new Date('2025-09-29'), model: 'claude-sonnet-4-5-20250929' } // Starting September 29, 2025
+  { date: new Date('2025-09-29'), model: 'claude-sonnet-4-5-20250929' }, // Starting September 29, 2025
+  { date: new Date('2026-02-17'), model: 'claude-sonnet-4-6' } // Starting February 17, 2026
 ];
 
 // Initialize on page load
@@ -233,19 +217,13 @@ async function loadConversations() {
 
 // Format model name for display
 function formatModelName(model) {
-  // Check explicit mappings first (for known models and edge cases)
-  if (MODEL_DISPLAY_NAMES[model]) {
-    return MODEL_DISPLAY_NAMES[model];
-  }
-
-  // Try to parse unknown models
   if (!model || !model.startsWith('claude-')) {
     return model || 'Unknown';
   }
 
-  // Pattern for new format: claude-{model}-{major}[-{minor}]-{date}
-  // e.g., claude-sonnet-5-20260101 or claude-opus-5-1-20260101
-  const newFormatMatch = model.match(/^claude-(sonnet|opus|haiku)-(\d+)(?:-(\d+))?-\d{8}$/i);
+  // New format: claude-{type}-{major}[-{minor}][-{date}]
+  // e.g., claude-sonnet-4-6, claude-sonnet-4-5-20250929, claude-opus-5-20260101
+  const newFormatMatch = model.match(/^claude-(sonnet|opus|haiku)-(\d+)(?:-(\d+))?(?:-\d{8})?$/i);
   if (newFormatMatch) {
     const [, modelType, major, minor] = newFormatMatch;
     const modelName = modelType.charAt(0).toUpperCase() + modelType.slice(1);
@@ -253,8 +231,8 @@ function formatModelName(model) {
     return `Claude ${modelName} ${version}`;
   }
 
-  // Pattern for old format: claude-{major}[-{minor}]-{model}-{date}
-  // e.g., claude-3-sonnet-20240229 or claude-3-5-sonnet-20240620
+  // Old format: claude-{major}[-{minor}]-{type}-{date}
+  // e.g., claude-3-sonnet-20240229, claude-3-5-sonnet-20240620
   const oldFormatMatch = model.match(/^claude-(\d+)(?:-(\d+))?-(sonnet|opus|haiku)-\d{8}$/i);
   if (oldFormatMatch) {
     const [, major, minor, modelType] = oldFormatMatch;
