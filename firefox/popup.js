@@ -9,6 +9,10 @@ async function getOrgId() {
 
 // Check if org ID is configured on popup load
 document.addEventListener('DOMContentLoaded', async () => {
+  // Display version from manifest
+  const manifest = chrome.runtime.getManifest();
+  document.getElementById('versionDisplay').textContent = `v${manifest.version}`;
+
   const orgId = await getOrgId();
   if (!orgId) {
     document.getElementById('setupNotice').style.display = 'block';
