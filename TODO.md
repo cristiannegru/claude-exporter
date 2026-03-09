@@ -89,12 +89,12 @@
   - background.js re-injects all three content scripts on reload (fixes "not defined" errors)
   - Removed stale export_summary.json toast reference
 
-## Pending 🔄
+- **Automatic organization ID detection** (v1.8.11)
+  - Auto-detect org ID from Claude API on popup open and browse page load
+  - Saves to storage so it persists across sessions
+  - Falls back to manual configuration if auto-detection fails
 
-- **Automatic organization ID detection**
-  - Auto-detect and store organization ID from Claude.ai
-  - Eliminate manual configuration step
-  - Fallback to manual configuration if auto-detection fails
+## Pending 🔄
 
 - **Branch export options**
   - Add option to export all branches vs. only current branch
@@ -151,7 +151,7 @@
 
 (none currently open)
 
-## Current Version: 1.8.10
+## Current Version: 1.8.11
 
 ## Notes
 
