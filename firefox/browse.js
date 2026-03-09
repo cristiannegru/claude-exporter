@@ -936,7 +936,7 @@ async function exportAllFiltered() {
     progressModal.style.display = 'none';
     
     if (failed > 0) {
-      showToast(`Exported ${completed} of ${total} conversations (${failed} failed). Check export_summary.json in the ZIP for details.`);
+      showToast(`Exported ${completed} of ${total} conversations (${failed} failed).`);
     } else {
       showToast(`Successfully exported all ${completed} conversations!`);
     }

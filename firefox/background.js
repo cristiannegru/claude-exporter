@@ -7,12 +7,13 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.runtime.onInstalled.addListener(() => {
   chrome.tabs.query({ url: 'https://claude.ai/*' }, (tabs) => {
     tabs.forEach(tab => {
-      chrome.tabs.executeScript(tab.id, {
-        file: 'content.js'
-      }, () => {
-        if (chrome.runtime.lastError) {
-          console.log('Could not inject into tab', tab.id, chrome.runtime.lastError.message);
-        }
+      const files = ['jszip.min.js', 'utils.js', 'content.js'];
+      files.forEach(file => {
+        chrome.tabs.executeScript(tab.id, { file }, () => {
+          if (chrome.runtime.lastError) {
+            console.log('Could not inject', file, 'into tab', tab.id, chrome.runtime.lastError.message);
+          }
+        });
       });
     });
   });
@@ -23,10 +24,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'ensureContentScript') {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs[0]) {
-        chrome.tabs.executeScript(tabs[0].id, {
-          file: 'content.js'
-        }, () => {
-          sendResponse({ success: true });
+        const files = ['jszip.min.js', 'utils.js', 'content.js'];
+        let injected = 0;
+        files.forEach(file => {
+          chrome.tabs.executeScript(tabs[0].id, { file }, () => {
+            injected++;
+            if (injected === files.length) {
+              sendResponse({ success: true });
+            }
+          });
         });
       }
     });

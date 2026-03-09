@@ -255,15 +255,7 @@ function inferModel(conversation) {
       .then(async conversations => {
         console.log(`Fetched ${conversations.length} conversations`);
         
-        if (request.format === 'json' && !request.extractArtifacts) {
-          // For JSON without artifact extraction, export as a single file
-          // Format: claude-exports-20251031-143045.json
-          const datetime = getLocalDateTimeString();
-          const filename = `claude-exports-${datetime}.json`;
-          console.log('Downloading all conversations as JSON:', filename);
-          downloadFile(JSON.stringify(conversations, null, 2), filename);
-          sendResponse({ success: true, count: conversations.length });
-        } else if (request.extractArtifacts || request.flattenArtifacts) {
+        if (request.extractArtifacts || request.flattenArtifacts) {
           // When extracting artifacts (nested or flat), always create a ZIP
           const zip = new JSZip();
           let processed = 0;
@@ -379,7 +371,8 @@ function inferModel(conversation) {
             sendResponse({ success: true, count: included });
           }
         } else {
-          // For other formats without artifact extraction, create individual files
+          // For other formats without artifact extraction, create a ZIP
+          const zip = new JSZip();
           let count = 0;
           let errors = [];
 
@@ -391,19 +384,21 @@ function inferModel(conversation) {
               // Infer model if null
               fullConv.model = inferModel(fullConv);
 
-              let content, filename, type;
+              let content, filename;
+              const safeName = (conv.name || conv.uuid).replace(/[<>:"/\\|?*]/g, '_');
 
               if (request.format === 'markdown') {
                 content = convertToMarkdown(fullConv, request.includeMetadata, conv.uuid, request.includeArtifacts, request.includeThinking);
-                filename = `${conv.name || conv.uuid}.md`;
-                type = 'text/markdown';
-              } else {
+                filename = `${safeName}.md`;
+              } else if (request.format === 'text') {
                 content = convertToText(fullConv, request.includeMetadata, request.includeArtifacts, request.includeThinking);
-                filename = `${conv.name || conv.uuid}.txt`;
-                type = 'text/plain';
+                filename = `${safeName}.txt`;
+              } else {
+                content = JSON.stringify(fullConv, null, 2);
+                filename = `${safeName}.json`;
               }
 
-              downloadFile(content, filename, type);
+              zip.file(filename, content);
               count++;
 
               // Add a small delay to avoid overwhelming the API
@@ -413,6 +408,19 @@ function inferModel(conversation) {
               errors.push(`${conv.name || conv.uuid}: ${error.message}`);
             }
           }
+
+          // Generate and download ZIP
+          zip.generateAsync({ type: 'blob' }).then(blob => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const datetime = getLocalDateTimeString();
+            a.download = `claude-exports-${datetime}.zip`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          });
 
           if (errors.length > 0) {
             console.warn('Some conversations failed to export:', errors);
