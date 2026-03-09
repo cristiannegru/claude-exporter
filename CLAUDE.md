@@ -36,6 +36,7 @@ Keep it concise. Don't duplicate what's already here — update existing section
 - Not: `wip`, `fix stuff`, `update`, `final FINAL (1)`
 - Group related changes into one commit (e.g., Chrome + Firefox changes for the same fix = one commit)
 - Don't push unless asked
+- **Branching**: Do all development on `testing` branch. Merge to `main` only when creating a release
 
 ## Documentation Upkeep
 
