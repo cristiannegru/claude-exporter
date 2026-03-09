@@ -2,7 +2,7 @@
 
 ## [1.8.11]
 
-- 403 errors now show a helpful message with a link to org ID settings
+- 403/404 errors now show a helpful message with a link to org ID settings
 
 ## [1.8.10]
 
