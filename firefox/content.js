@@ -492,6 +492,32 @@ function inferModel(conversation) {
 
     return true;
   }
+
+  // Handle detectOrgId request — auto-detect organization ID from Claude API
+  if (request.action === 'detectOrgId') {
+    fetch('https://claude.ai/api/organizations', {
+      credentials: 'include',
+      headers: { 'Accept': 'application/json' }
+    })
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+      })
+      .then(orgs => {
+        if (orgs && orgs.length > 0 && orgs[0].uuid) {
+          const orgId = orgs[0].uuid;
+          chrome.storage.sync.set({ organizationId: orgId });
+          sendResponse({ success: true, orgId });
+        } else {
+          sendResponse({ success: false, error: 'No organizations found' });
+        }
+      })
+      .catch(error => {
+        sendResponse({ success: false, error: error.message });
+      });
+
+    return true;
+  }
   });
 
 } // End of double-injection guard

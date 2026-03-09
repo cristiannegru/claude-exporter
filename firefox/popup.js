@@ -1,10 +1,29 @@
-// Get organization ID from storage
+// Get organization ID from storage, or auto-detect from Claude API
 async function getOrgId() {
-  return new Promise((resolve) => {
+  // Try storage first
+  const stored = await new Promise((resolve) => {
     chrome.storage.sync.get(['organizationId'], (result) => {
       resolve(result.organizationId);
     });
   });
+  if (stored) return stored;
+
+  // Try auto-detection via content script on active claude.ai tab
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tab && tab.url && tab.url.includes('claude.ai')) {
+      const response = await new Promise((resolve) => {
+        chrome.tabs.sendMessage(tab.id, { action: 'detectOrgId' }, (resp) => {
+          if (chrome.runtime.lastError) resolve(null);
+          else resolve(resp);
+        });
+      });
+      if (response?.success) return response.orgId;
+    }
+  } catch (e) {
+    console.log('Auto-detect orgId failed:', e);
+  }
+  return null;
 }
 
 // Check if org ID is configured on popup load
