@@ -116,31 +116,17 @@ function inferModel(conversation) {
   return DEFAULT_MODEL_TIMELINE[0].model;
 }
 
-// Load organization ID from storage, or auto-detect from Claude API
+// Load organization ID from storage
 async function loadOrgId() {
-  // Try storage first
-  const stored = await new Promise((resolve) => {
+  return new Promise((resolve) => {
     chrome.storage.sync.get(['organizationId'], (result) => {
-      resolve(result.organizationId);
+      orgId = result.organizationId;
+      if (!orgId) {
+        showError('Organization ID not configured. Please configure it in the extension options.');
+      }
+      resolve();
     });
   });
-  if (stored) {
-    orgId = stored;
-    return;
-  }
-
-  // Try auto-detection via content script on a claude.ai tab
-  try {
-    const response = await sendMessageToClaudeTab('detectOrgId', {});
-    if (response?.success) {
-      orgId = response.orgId;
-      return;
-    }
-  } catch (e) {
-    console.log('Auto-detect orgId failed:', e);
-  }
-
-  showError('Organization ID not configured. Please configure it in the extension options.');
 }
 
 // Helper function to find a claude.ai tab and send a message

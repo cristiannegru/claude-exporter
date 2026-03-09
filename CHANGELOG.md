@@ -1,10 +1,5 @@
 # Changelog
 
-## [1.8.11]
-
-- Auto-detect organization ID from Claude API (no manual setup needed)
-- Falls back to manual configuration if auto-detection fails
-
 ## [1.8.10]
 
 - Replaced PNG popup header with CSS gradient header
