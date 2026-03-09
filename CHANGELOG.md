@@ -1,0 +1,41 @@
+# Changelog
+
+## [1.8.8]
+
+- Export All from popup now always creates a ZIP for all formats (JSON, markdown, text)
+- JSON Export All now fetches full conversation data (was only exporting summary list)
+- background.js now re-injects all content scripts (jszip, utils, content) on install/update
+- Removed stale export_summary.json toast reference
+
+## [1.8.7]
+
+- Added Claude Sonnet 4.6 model to default timeline
+- Replaced hardcoded MODEL_DISPLAY_NAMES with smart model name parsing
+- Fixed model name regex to handle dateless model strings (e.g., `claude-sonnet-4-6`)
+- Removed `plaintext` language tag from thinking/pasted quadruple-backtick blocks
+- Added Chrome Web Store and Firefox Add-ons links to README
+
+## [1.8.6]
+
+- Published to Chrome Web Store and Firefox Add-ons
+- Bumped version for store submission
+
+## [1.8.5]
+
+- Switched to `### Thinking` / `### Pasted` headers with quadruple-backtick code blocks
+- Fixed pasted text attachments missing from markdown export
+- Removed redundant bug tracking from TODO
+
+## [1.8.2]
+
+- Multi-level sorting with shift+click
+- Skip ZIP for single-file exports
+- Shortened "Last Updated" table header to "Updated"
+
+## [1.8.0 - 1.8.1]
+
+- Full Firefox support with Manifest V2
+- Mozilla-signed .xpi for permanent installation
+- Theme syncing between popup and browse window
+- Local timezone support in export filenames
+- Cleaner filename format (YYYYMMDD-HHMMSS)

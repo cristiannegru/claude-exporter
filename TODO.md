@@ -69,6 +69,26 @@
   - Local timezone support in export filenames
   - Cleaner filename format (YYYYMMDD-HHMMSS)
 
+- **Markdown export formatting** (v1.8.5)
+  - `### Thinking` and `### Pasted` headers with quadruple-backtick code blocks
+  - Clear visual hierarchy (## Speaker → ### Content type)
+
+- **Pasted text attachment export** (v1.8.5)
+  - Exports pasted content with `### Pasted` header and quadruple-backtick code block
+
+- **Store publishing & README update** (v1.8.6-1.8.7)
+  - Published to Chrome Web Store and Firefox Add-ons
+  - Added store links to README, renamed to "Manual Installation" section
+  - Claude Sonnet 4.6 model support
+  - Smart model name parsing (no more hardcoded lookup table)
+  - Removed `plaintext` language tag from thinking/pasted code blocks
+
+- **Bulk export & script injection fixes** (v1.8.8)
+  - Export All from popup now always creates a ZIP (was downloading individual files for markdown/text)
+  - JSON Export All now fetches full conversation data per chat (was only exporting summary list)
+  - background.js re-injects all three content scripts on reload (fixes "not defined" errors)
+  - Removed stale export_summary.json toast reference
+
 ## Pending 🔄
 
 - **Automatic organization ID detection**
@@ -124,27 +144,14 @@
 - **Google Drive integration**
   - Link/sync exports to Google Drive
 
-- **DONE: Markdown export formatting review**
-  - ~~Consider changing how .md formats Claude's thinking and message blocks~~
-  - Updated: `### Thinking` and `### Pasted` headers with quadruple-backtick code blocks
-  - Provides clear visual hierarchy (## Speaker → ### Content type)
-
 - **UI cleanup: Remove redundant "View" button**
   - Chat name already links to conversation, "View" button may be unnecessary
 
-- **README update: Installation section**
-  - Add links to Chrome Web Store and Firefox Add-ons pages
-  - Rename current Installation section to "Manual Installation"
-  - Extensions now published on both browser stores
-
 ## Bugs 🐛
 
-- **FIXED: Pasted text attachments missing from export**
-  - ~~Long pasted text that Claude.ai shows as "PASTED" attachment is omitted from exported .md files~~
-  - ~~Content exists in `attachments[].extracted_content` but export logic doesn't check for it~~
-  - Fixed: Now exports pasted content with `### Pasted` header and quadruple-backtick code block
+(none currently open)
 
-## Current Version: 1.8.6
+## Current Version: 1.8.8
 
 ## Notes
 
