@@ -91,6 +91,8 @@ const DEFAULT_MODEL_TIMELINE = [
 document.addEventListener('DOMContentLoaded', async () => {
   initTheme();
   await loadOrgId();
+  const loadingText = document.getElementById('loadingText');
+  if (loadingText) loadingText.textContent = 'Loading conversations...';
   await loadConversations();
   setupEventListeners();
 });
