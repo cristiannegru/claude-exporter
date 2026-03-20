@@ -90,7 +90,10 @@ const DEFAULT_MODEL_TIMELINE = [
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', async () => {
   initTheme();
+  const loadingStart = Date.now();
   await loadOrgId();
+  const elapsed = Date.now() - loadingStart;
+  if (elapsed < 1000) await new Promise(r => setTimeout(r, 1000 - elapsed));
   const loadingText = document.getElementById('loadingText');
   if (loadingText) loadingText.textContent = 'Loading conversations...';
   await loadConversations();
