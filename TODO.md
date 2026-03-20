@@ -158,6 +158,12 @@
 - **UI cleanup: Remove redundant "View" button**
   - Chat name already links to conversation, "View" button may be unnecessary
 
+- **Remove claude.ai tab dependency** (low priority)
+  - Use `chrome.cookies` API to read claude.ai session cookies directly
+  - Make API calls from background worker / browse page without needing a relay tab
+  - Would allow browse page and auto-detection to work without an open claude.ai tab
+  - Requires adding `cookies` permission to manifest
+
 ## Bugs 🐛
 
 (none currently open)

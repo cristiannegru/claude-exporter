@@ -4,6 +4,7 @@
 
 - Auto-detect organization ID from Claude.ai API on every export action
 - No more stale org ID issues when users switch organizations
+- Correctly selects the chat org (not API org) when multiple orgs exist
 - Falls back to manually configured org ID if auto-detect fails
 - Export buttons no longer disabled on popup load
 
