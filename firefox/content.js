@@ -96,6 +96,37 @@ function inferModel(conversation) {
 
   // Handle messages from popup
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  // Auto-detect organization ID from Claude.ai API
+  if (request.action === 'detectOrgId') {
+    console.log('Auto-detecting organization ID...');
+
+    fetch('https://claude.ai/api/organizations', {
+      credentials: 'include',
+      headers: { 'Accept': 'application/json' }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Failed to fetch organizations: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(orgs => {
+        if (Array.isArray(orgs) && orgs.length > 0) {
+          const orgId = orgs[0].uuid;
+          console.log('Auto-detected organization ID:', orgId);
+          sendResponse({ success: true, orgId });
+        } else {
+          throw new Error('No organizations found');
+        }
+      })
+      .catch(error => {
+        console.error('Auto-detect org ID failed:', error);
+        sendResponse({ success: false, error: error.message });
+      });
+
+    return true;
+  }
+
   if (request.action === 'exportConversation') {
     console.log('Export conversation request received:', request);
 

@@ -1,10 +1,37 @@
-// Get organization ID from storage
-async function getOrgId() {
+// Get organization ID from storage (fallback)
+async function getStoredOrgId() {
   return new Promise((resolve) => {
     chrome.storage.sync.get(['organizationId'], (result) => {
       resolve(result.organizationId);
     });
   });
+}
+
+// Auto-detect organization ID via content script, fall back to stored
+async function getOrgId() {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tab && tab.url && tab.url.includes('claude.ai')) {
+      const response = await new Promise((resolve) => {
+        chrome.tabs.sendMessage(tab.id, { action: 'detectOrgId' }, (res) => {
+          if (chrome.runtime.lastError) {
+            resolve(null);
+          } else {
+            resolve(res);
+          }
+        });
+      });
+      if (response && response.success && response.orgId) {
+        // Save for future use / fallback
+        chrome.storage.sync.set({ organizationId: response.orgId });
+        return response.orgId;
+      }
+    }
+  } catch (e) {
+    console.log('Auto-detect org ID failed, falling back to stored:', e);
+  }
+  // Fall back to stored org ID
+  return getStoredOrgId();
 }
 
 // Check if org ID is configured on popup load
@@ -13,11 +40,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const manifest = chrome.runtime.getManifest();
   document.getElementById('header-version').textContent = `v${manifest.version}`;
 
+  // Try to detect org ID — show setup notice only if both auto-detect and stored fail
   const orgId = await getOrgId();
   if (!orgId) {
     document.getElementById('setupNotice').style.display = 'block';
-    document.getElementById('exportCurrent').disabled = true;
-    document.getElementById('exportAll').disabled = true;
   }
 
   // Handle checkbox dependencies

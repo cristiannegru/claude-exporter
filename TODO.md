@@ -92,9 +92,20 @@
 ## Pending 🔄
 
 - **Automatic organization ID detection**
-  - Auto-detect and store organization ID from Claude.ai
+  - Auto-detect org ID from Claude.ai API on every export action (always fresh)
   - Eliminate manual configuration step
   - Fallback to manual configuration if auto-detection fails
+  - Note: Org ID is NOT static — users get confused when manually-set ID stops working
+
+- **Settings button in popup**
+  - Add a settings/gear button to the popup UI
+  - Opens options page for configuring org ID (manual override)
+  - Should be accessible but not required once auto-detection works
+
+- **Test connection button in popup**
+  - Quick connection test from the popup (not just the options page)
+  - Verify org ID is valid and user is authenticated
+  - Show success/failure status inline
 
 - **Branch export options**
   - Add option to export all branches vs. only current branch
