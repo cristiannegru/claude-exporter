@@ -104,8 +104,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       })
       .then(orgs => {
         if (Array.isArray(orgs) && orgs.length > 0) {
-          const orgId = orgs[0].uuid;
-          console.log('Auto-detected organization ID:', orgId);
+          // Find the org with "chat" capability (the Claude.ai org, not the API org)
+          const chatOrg = orgs.find(org =>
+            org.capabilities && org.capabilities.includes('chat')
+          );
+          const orgId = chatOrg ? chatOrg.uuid : orgs[0].uuid;
+          console.log('Auto-detected organization ID:', orgId, chatOrg ? '(chat org)' : '(fallback to first)');
           sendResponse({ success: true, orgId });
         } else {
           throw new Error('No organizations found');
