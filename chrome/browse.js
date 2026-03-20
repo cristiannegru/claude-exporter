@@ -74,6 +74,41 @@ let currentSort = 'updated_desc';
 let sortStack = []; // Track multi-level sorting: [{field: 'name', direction: 'asc'}, ...]
 let selectedConversations = new Set(); // Track selected conversation IDs
 let lastCheckedIndex = null; // Track last checked checkbox for shift+click range selection
+let exportTimestamps = {}; // Map conversation UUID to last export timestamp
+let statusFilter = 'all'; // 'all', 'new', 'exported'
+
+// Export timestamp storage helpers
+async function loadExportTimestamps() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(['exportTimestamps'], (result) => {
+      exportTimestamps = result.exportTimestamps || {};
+      resolve();
+    });
+  });
+}
+
+async function saveExportTimestamp(conversationId) {
+  exportTimestamps[conversationId] = new Date().toISOString();
+  return new Promise((resolve) => {
+    chrome.storage.local.set({ exportTimestamps }, resolve);
+  });
+}
+
+async function saveExportTimestamps(conversationIds) {
+  const now = new Date().toISOString();
+  for (const id of conversationIds) {
+    exportTimestamps[id] = now;
+  }
+  return new Promise((resolve) => {
+    chrome.storage.local.set({ exportTimestamps }, resolve);
+  });
+}
+
+function isNewOrUpdated(conv) {
+  const lastExport = exportTimestamps[conv.uuid];
+  if (!lastExport) return true; // Never exported
+  return new Date(conv.updated_at) > new Date(lastExport);
+}
 
 // Default model timeline for null models
 // Each entry represents when that model became the default
@@ -92,12 +127,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   initTheme();
   const loadingStart = Date.now();
   await loadOrgId();
+  await loadExportTimestamps();
   const elapsed = Date.now() - loadingStart;
   if (elapsed < 1000) await new Promise(r => setTimeout(r, 1000 - elapsed));
   const loadingText = document.getElementById('loadingText');
   if (loadingText) loadingText.textContent = 'Loading conversations...';
   await loadConversations();
   setupEventListeners();
+  // Auto-select new/updated conversations on load
+  autoSelectNewUpdated();
 });
 
 // Infer model for conversations with null model based on date
@@ -290,7 +328,15 @@ function applyFiltersAndSort() {
       conv.name.toLowerCase().includes(searchTerm) ||
       (conv.summary && conv.summary.toLowerCase().includes(searchTerm));
 
-    return matchesSearch;
+    // Status filter
+    let matchesStatus = true;
+    if (statusFilter === 'new') {
+      matchesStatus = isNewOrUpdated(conv);
+    } else if (statusFilter === 'exported') {
+      matchesStatus = !isNewOrUpdated(conv);
+    }
+
+    return matchesSearch && matchesStatus;
   });
 
   // Sort conversations
@@ -420,10 +466,12 @@ function displayConversations() {
     const modelBadgeClass = getModelBadgeClass(conv.model);
     const projectName = getProjectName(conv);
 
+    const newUpdated = isNewOrUpdated(conv);
     html += `
       <tr data-id="${escapeHtml(conv.uuid)}">
         <td>
           <div class="conversation-name">
+            ${newUpdated ? '<span class="new-dot" title="New or updated since last export"></span>' : ''}
             <a href="https://claude.ai/chat/${escapeHtml(conv.uuid)}" target="_blank" title="${escapeHtml(conv.name)}">
               ${escapeHtml(conv.name)}
             </a>
@@ -594,7 +642,20 @@ function updateExportButtonText() {
 // Update statistics
 function updateStats() {
   const stats = document.getElementById('stats');
-  stats.textContent = `Showing ${filteredConversations.length} of ${allConversations.length} conversations`;
+  const newCount = allConversations.filter(c => isNewOrUpdated(c)).length;
+  stats.textContent = `Showing ${filteredConversations.length} of ${allConversations.length} conversations (${newCount} new/updated)`;
+}
+
+// Auto-select new/updated conversations
+function autoSelectNewUpdated() {
+  selectedConversations.clear();
+  filteredConversations.forEach(conv => {
+    if (isNewOrUpdated(conv)) {
+      selectedConversations.add(conv.uuid);
+    }
+  });
+  displayConversations();
+  updateExportButtonText();
 }
 
 // Export single conversation
@@ -722,6 +783,7 @@ async function exportConversation(conversationId, conversationName) {
       if (includeChats === false) {
         // If chats are disabled and we're not extracting artifacts, there's nothing to export
         showToast('Nothing to export. Enable "Chats" or "Artifacts nested".', true);
+        return;
       } else {
         let content, filename, type;
         switch (format) {
@@ -741,10 +803,15 @@ async function exportConversation(conversationId, conversationName) {
             type = 'application/json';
         }
         downloadFile(content, filename, type);
-        showToast(`Exported: ${conversationName}`);
       }
     }
-    
+
+    // Record export timestamp and refresh display
+    await saveExportTimestamp(conversationId);
+    showToast(`Exported: ${conversationName}`);
+    displayConversations();
+    updateStats();
+
   } catch (error) {
     console.error('Export error:', error);
     showToast(`Failed to export: ${error.message}`, true);
@@ -954,7 +1021,15 @@ async function exportAllFiltered() {
     URL.revokeObjectURL(url);
     
     progressModal.style.display = 'none';
-    
+
+    // Record export timestamps for successfully exported conversations
+    const exportedIds = conversationsToExport
+      .filter(conv => !failedConversations.includes(conv.name))
+      .map(conv => conv.uuid);
+    await saveExportTimestamps(exportedIds);
+    displayConversations();
+    updateStats();
+
     if (failed > 0) {
       showToast(`Exported ${completed} of ${total} conversations (${failed} failed).`);
     } else {
@@ -1042,6 +1117,12 @@ function setupEventListeners() {
   document.getElementById('clearSearch').addEventListener('click', () => {
     document.getElementById('searchInput').value = '';
     document.getElementById('searchBox').classList.remove('has-text');
+    applyFiltersAndSort();
+  });
+
+  // Status filter
+  document.getElementById('statusFilter').addEventListener('change', (e) => {
+    statusFilter = e.target.value;
     applyFiltersAndSort();
   });
 

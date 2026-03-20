@@ -336,16 +336,45 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .new-dot {
+      width: 8px;
+      height: 8px;
+      min-width: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      display: inline-block;
     }
 
     .conversation-name a {
       color: inherit;
       text-decoration: none;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .conversation-name a:hover {
       color: var(--link-hover);
       text-decoration: underline;
+    }
+
+    .status-filter {
+      display: flex;
+      align-items: center;
+    }
+
+    .status-filter select {
+      padding: 6px 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--bg-body);
+      color: var(--text-primary);
+      font-size: 13px;
+      cursor: pointer;
     }
 
     .date {
@@ -558,6 +587,14 @@
       <div class="search-box" id="searchBox">
         <input type="text" id="searchInput" placeholder="Search conversations by name...">
         <button class="clear-btn" id="clearSearch">✕</button>
+      </div>
+
+      <div class="status-filter">
+        <select id="statusFilter">
+          <option value="all">All conversations</option>
+          <option value="new">New / Updated</option>
+          <option value="exported">Previously exported</option>
+        </select>
       </div>
 
       <div class="export-controls-wrapper">

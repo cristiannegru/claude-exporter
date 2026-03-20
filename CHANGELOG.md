@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.8.13]
+
+- Track export timestamps per conversation in chrome.storage.local
+- Green dot indicator on browse page for new/updated conversations
+- Status filter dropdown (All / New+Updated / Previously exported)
+- Auto-select new/updated conversations on browse page load
+- Stats bar shows new/updated count
+- Timestamps recorded across all export flows (popup, browse, bulk)
+
 ## [1.8.12]
 
 - Auto-detect organization ID from Claude.ai API on every export action

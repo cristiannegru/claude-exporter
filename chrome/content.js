@@ -7,6 +7,27 @@ if (window.claudeExporterContentScriptLoaded) {
 // Note: Organization ID is now stored in extension settings
 // Users need to configure it in the extension options page
 
+// Record export timestamp for a conversation
+function recordExportTimestamp(conversationId) {
+  chrome.storage.local.get(['exportTimestamps'], (result) => {
+    const timestamps = result.exportTimestamps || {};
+    timestamps[conversationId] = new Date().toISOString();
+    chrome.storage.local.set({ exportTimestamps: timestamps });
+  });
+}
+
+// Record export timestamps for multiple conversations
+function recordExportTimestamps(conversationIds) {
+  chrome.storage.local.get(['exportTimestamps'], (result) => {
+    const timestamps = result.exportTimestamps || {};
+    const now = new Date().toISOString();
+    for (const id of conversationIds) {
+      timestamps[id] = now;
+    }
+    chrome.storage.local.set({ exportTimestamps: timestamps });
+  });
+}
+
 // Default model timeline for null models
 const DEFAULT_MODEL_TIMELINE = [
   { date: new Date('2024-01-01'), model: 'claude-3-sonnet-20240229' }, // Before June 20, 2024
@@ -205,6 +226,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             });
 
             console.log(`Downloading ZIP with conversation and ${artifactFiles.length} artifact(s)`);
+            recordExportTimestamp(request.conversationId);
             sendResponse({ success: true });
           } else {
             // No artifacts found, just export conversation normally
@@ -227,6 +249,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             }
             console.log('No artifacts found. Downloading file:', filename);
             downloadFile(content, filename, type);
+            recordExportTimestamp(request.conversationId);
             sendResponse({ success: true });
           }
         } else {
@@ -259,6 +282,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
             console.log('Downloading file:', filename);
             downloadFile(content, filename, type);
+            recordExportTimestamp(request.conversationId);
             sendResponse({ success: true });
           }
         }
@@ -387,6 +411,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             URL.revokeObjectURL(url);
           });
 
+          // Record export timestamps for all successfully exported conversations
+          const exportedIds = conversations.map(c => c.uuid).filter(id => !errors.some(e => e.includes(id)));
+          recordExportTimestamps(exportedIds);
+
           if (errors.length > 0) {
             console.warn('Some conversations failed to export:', errors);
             sendResponse({
@@ -448,6 +476,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
           });
+
+          // Record export timestamps for successfully exported conversations
+          const exportedIds = conversations.map(c => c.uuid).filter(id => !errors.some(e => e.includes(id)));
+          recordExportTimestamps(exportedIds);
 
           if (errors.length > 0) {
             console.warn('Some conversations failed to export:', errors);

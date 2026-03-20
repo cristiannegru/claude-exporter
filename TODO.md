@@ -95,6 +95,12 @@
   - Falls back to stored org ID if auto-detect fails
   - Fixes issue where manually-set org ID becomes stale
 
+- **New/updated conversation tracking** (v1.8.13)
+  - Green dot indicator for conversations not yet exported or updated since last export
+  - Status filter dropdown (All / New+Updated / Previously exported)
+  - Auto-selects new/updated conversations on browse page load
+  - Export timestamps tracked across all export flows
+
 ## Pending 🔄
 
 - **Settings button in popup**
@@ -147,11 +153,6 @@
 - **Model name/ID toggle in table**
   - Click on model name to toggle between display name and model ID
 
-- **Track last backup time**
-  - Store download timestamps in `chrome.storage.local` / `browser.storage.local`
-  - Display "Last Backed Up" indicator in table
-  - Optionally highlight chats updated since last backup
-
 - **Google Drive integration**
   - Link/sync exports to Google Drive
 
@@ -168,7 +169,7 @@
 
 (none currently open)
 
-## Current Version: 1.8.12
+## Current Version: 1.8.13
 
 ## Notes
 
