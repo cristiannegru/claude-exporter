@@ -164,6 +164,10 @@
   - Consider: incremental sync (only export changed conversations) vs full re-export
 
 
+- **Improve model badge color contrast in light mode** (low priority)
+  - Model name badges (Sonnet/Opus/Haiku) may be hard to read in light theme
+  - Increase text/background contrast for accessibility
+
 - **Localization / i18n** (low priority)
   - Detect user's browser language and display UI in their language
   - Use Chrome/Firefox i18n APIs (`chrome.i18n`, `_locales/` folder)
