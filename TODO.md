@@ -159,6 +159,15 @@
 - **UI cleanup: Remove redundant "View" button**
   - Chat name already links to conversation, "View" button may be unnecessary
 
+- **Local sync / export folder mode**
+  - User defines a local export directory
+  - Extension compares current Claude data against exported files to detect changes
+  - Git-like approach: diff actual content, not just timestamps
+  - More accurate than timestamp-based new/updated detection
+  - Timestamp-based tracking (green dots) remains as the default for users who don't configure a folder
+  - Would need File System Access API or similar for folder read/write
+  - Consider: incremental sync (only export changed conversations) vs full re-export
+
 - **"Mark all as exported" / "Mark all as new" buttons**
   - Reset export timestamps for all conversations
   - Will live in settings menu (when theme toggle is replaced with settings)
