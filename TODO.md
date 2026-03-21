@@ -159,6 +159,11 @@
 - **UI cleanup: Remove redundant "View" button**
   - Chat name already links to conversation, "View" button may be unnecessary
 
+- **"Mark all as exported" / "Mark all as new" buttons**
+  - Reset export timestamps for all conversations
+  - Will live in settings menu (when theme toggle is replaced with settings)
+  - Useful when user loses exported files and needs to re-export
+
 - **Remove claude.ai tab dependency** (low priority)
   - Use `chrome.cookies` API to read claude.ai session cookies directly
   - Make API calls from background worker / browse page without needing a relay tab
