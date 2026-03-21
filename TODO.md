@@ -164,6 +164,11 @@
   - Consider: incremental sync (only export changed conversations) vs full re-export
 
 
+- **Localization / i18n** (low priority)
+  - Detect user's browser language and display UI in their language
+  - Use Chrome/Firefox i18n APIs (`chrome.i18n`, `_locales/` folder)
+  - Start with English, add community-contributed translations
+
 - **Remove claude.ai tab dependency** (low priority)
   - Use `chrome.cookies` API to read claude.ai session cookies directly
   - Make API calls from background worker / browse page without needing a relay tab
