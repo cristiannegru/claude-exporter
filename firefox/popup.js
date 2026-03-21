@@ -77,6 +77,11 @@ document.getElementById('openOptions').addEventListener('click', (e) => {
   e.preventDefault();
   chrome.runtime.openOptionsPage();
 });
+
+// Handle settings gear click
+document.getElementById('openSettings').addEventListener('click', () => {
+  chrome.runtime.openOptionsPage();
+});
   
   // Get current conversation ID from URL
   async function getCurrentConversationId() {

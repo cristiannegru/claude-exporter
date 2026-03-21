@@ -120,7 +120,11 @@
       flex: 1;
     }
 
-    .theme-toggle {
+    .settings-wrapper {
+      position: relative;
+    }
+
+    .settings-btn {
       background: none;
       border: none;
       cursor: pointer;
@@ -133,14 +137,71 @@
       border-radius: 50%;
     }
 
-    .theme-toggle:hover {
+    .settings-btn:hover {
       color: var(--primary-color);
       background: var(--secondary-bg);
     }
 
-    .theme-toggle svg {
+    .settings-btn svg {
       width: 24px;
       height: 24px;
+    }
+
+    .settings-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 4px 16px var(--shadow-md);
+      min-width: 240px;
+      z-index: 1000;
+      padding: 4px 0;
+    }
+
+    .settings-dropdown.open {
+      display: block;
+    }
+
+    .settings-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-size: 13px;
+      color: var(--text-primary);
+    }
+
+    .settings-item:hover {
+      background: var(--secondary-bg);
+    }
+
+    .settings-label {
+      font-weight: 500;
+    }
+
+    .settings-value {
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .settings-org-id {
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: monospace;
+      font-size: 11px;
+    }
+
+    .settings-divider {
+      height: 1px;
+      background: var(--border-color);
+      margin: 4px 0;
     }
     
     .controls {
@@ -557,22 +618,41 @@
   <div class="header">
     <div class="header-top">
       <div class="header-left">
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-          <svg class="sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="5" stroke-width="2"/>
-            <line x1="12" y1="1" x2="12" y2="3" stroke-width="2"/>
-            <line x1="12" y1="21" x2="12" y2="23" stroke-width="2"/>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke-width="2"/>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke-width="2"/>
-            <line x1="1" y1="12" x2="3" y2="12" stroke-width="2"/>
-            <line x1="21" y1="12" x2="23" y2="12" stroke-width="2"/>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke-width="2"/>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke-width="2"/>
-          </svg>
-          <svg class="moon-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke-width="2"/>
-          </svg>
-        </button>
+        <div class="settings-wrapper">
+          <button class="settings-btn" id="settingsBtn" aria-label="Settings">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </button>
+          <div class="settings-dropdown" id="settingsDropdown">
+            <div class="settings-item" id="themeToggle">
+              <span class="settings-label">Theme</span>
+              <span class="settings-value" id="themeLabel">Dark</span>
+            </div>
+            <div class="settings-divider"></div>
+            <div class="settings-item" id="settingsOrgId">
+              <span class="settings-label">Org ID</span>
+              <span class="settings-value settings-org-id" id="orgIdDisplay" title="">Auto-detected</span>
+            </div>
+            <div class="settings-item" id="editOrgId">
+              <span class="settings-label">Edit Org ID</span>
+              <span class="settings-value">&#8594;</span>
+            </div>
+            <div class="settings-divider"></div>
+            <div class="settings-item" id="markAllExported">
+              <span class="settings-label">Mark all as exported</span>
+            </div>
+            <div class="settings-item" id="markAllNew">
+              <span class="settings-label">Mark all as new</span>
+            </div>
+            <div class="settings-divider"></div>
+            <div class="settings-item" id="testConnection">
+              <span class="settings-label">Test connection</span>
+              <span class="settings-value" id="connectionStatus"></span>
+            </div>
+          </div>
+        </div>
         <h1>Browse Claude Conversations</h1>
       </div>
 

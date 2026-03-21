@@ -1098,8 +1098,88 @@ function setupEventListeners() {
   includeChatsCheckbox.addEventListener('change', updateCheckboxStates);
   updateCheckboxStates(); // Initialize on load
 
+  // Settings dropdown
+  const settingsBtn = document.getElementById('settingsBtn');
+  const settingsDropdown = document.getElementById('settingsDropdown');
+
+  settingsBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    settingsDropdown.classList.toggle('open');
+    // Update org ID display when opening
+    if (settingsDropdown.classList.contains('open')) {
+      const orgDisplay = document.getElementById('orgIdDisplay');
+      if (orgId) {
+        orgDisplay.textContent = orgId.substring(0, 8) + '...';
+        orgDisplay.title = orgId;
+      } else {
+        orgDisplay.textContent = 'Not set';
+      }
+      // Update theme label
+      const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+      document.getElementById('themeLabel').textContent = theme === 'dark' ? 'Dark' : 'Light';
+    }
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', () => {
+    settingsDropdown.classList.remove('open');
+  });
+  settingsDropdown.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
   // Theme toggle
-  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    toggleTheme();
+    const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+    document.getElementById('themeLabel').textContent = theme === 'dark' ? 'Dark' : 'Light';
+  });
+
+  // Edit org ID — open options page
+  document.getElementById('editOrgId').addEventListener('click', () => {
+    chrome.runtime.openOptionsPage();
+    settingsDropdown.classList.remove('open');
+  });
+
+  // Mark all as exported
+  document.getElementById('markAllExported').addEventListener('click', async () => {
+    const ids = allConversations.map(c => c.uuid);
+    await saveExportTimestamps(ids);
+    displayConversations();
+    updateStats();
+    settingsDropdown.classList.remove('open');
+    showToast(`Marked ${ids.length} conversations as exported`);
+  });
+
+  // Mark all as new
+  document.getElementById('markAllNew').addEventListener('click', async () => {
+    exportTimestamps = {};
+    await new Promise(resolve => chrome.storage.local.set({ exportTimestamps: {} }, resolve));
+    selectedConversations.clear();
+    autoSelectNewUpdated();
+    updateStats();
+    settingsDropdown.classList.remove('open');
+    showToast('All conversations marked as new');
+  });
+
+  // Test connection
+  document.getElementById('testConnection').addEventListener('click', async () => {
+    const statusEl = document.getElementById('connectionStatus');
+    statusEl.textContent = 'Testing...';
+    try {
+      const response = await sendMessageToClaudeTab('loadConversations', { orgId });
+      if (response && response.success) {
+        statusEl.textContent = `OK (${response.conversations.length})`;
+        statusEl.style.color = '#22c55e';
+      } else {
+        statusEl.textContent = 'Failed';
+        statusEl.style.color = '#ef4444';
+      }
+    } catch (e) {
+      statusEl.textContent = 'Error';
+      statusEl.style.color = '#ef4444';
+    }
+  });
 
   // Search input
   const searchInput = document.getElementById('searchInput');

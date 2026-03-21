@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.9.0]
+
+- Settings dropdown menu on browse page (replaces theme toggle button)
+  - Theme toggle (light/dark)
+  - Org ID display with link to edit
+  - Mark all as exported / Mark all as new
+  - Test connection
+- Settings gear icon in popup header (opens options page)
+
 ## [1.8.13]
 
 - Track export timestamps per conversation in chrome.storage.local

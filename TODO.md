@@ -101,17 +101,12 @@
   - Auto-selects new/updated conversations on browse page load
   - Export timestamps tracked across all export flows
 
+- **Settings dropdown menu** (v1.9.0)
+  - Gear icon replaces theme toggle on browse page, opens dropdown
+  - Theme toggle, org ID display, mark all exported/new, test connection
+  - Gear icon in popup header opens options page
+
 ## Pending 🔄
-
-- **Settings button in popup**
-  - Add a settings/gear button to the popup UI (repurpose theme toggle area)
-  - Opens options page for configuring org ID (manual override)
-  - Should be accessible but not required since auto-detection works
-
-- **Test connection button in popup**
-  - Quick connection test from the popup (not just the options page)
-  - Verify org ID is valid and user is authenticated
-  - Show success/failure status inline
 
 - **Branch export options**
   - Add option to export all branches vs. only current branch
@@ -168,10 +163,6 @@
   - Would need File System Access API or similar for folder read/write
   - Consider: incremental sync (only export changed conversations) vs full re-export
 
-- **"Mark all as exported" / "Mark all as new" buttons**
-  - Reset export timestamps for all conversations
-  - Will live in settings menu (when theme toggle is replaced with settings)
-  - Useful when user loses exported files and needs to re-export
 
 - **Remove claude.ai tab dependency** (low priority)
   - Use `chrome.cookies` API to read claude.ai session cookies directly
@@ -183,7 +174,7 @@
 
 (none currently open)
 
-## Current Version: 1.8.13
+## Current Version: 1.9.0
 
 ## Notes
 
