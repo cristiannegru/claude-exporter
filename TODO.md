@@ -142,11 +142,10 @@
   - Support both global/account-level memory and project-specific memory
   - Allow backup and archival of configured AI behavior and context
 
-- **Date/time display options** (settings)
-  - Toggle time display on/off below date
-  - Date format option: M/D/Y or D/M/Y
-  - 12-hour or 24-hour time
-  - Advanced: custom format string (e.g. `%d/%m/%Y %H:%M`)
+- **Advanced date/time format settings**
+  - Custom format string (e.g. `%d/%m/%Y %H:%M`)
+  - Toggle time display on/off
+  - Other advanced formatting options beyond M/D/Y, D/M/Y, 12h/24h
 
 - **Model name/ID toggle in table**
   - Click on model name to toggle between display name and model ID

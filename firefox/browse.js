@@ -48,6 +48,8 @@ let selectedConversations = new Set(); // Track selected conversation IDs
 let lastCheckedIndex = null; // Track last checked checkbox for shift+click range selection
 let exportTimestamps = {}; // Map conversation UUID to last export timestamp
 let statusFilter = 'all'; // 'all', 'new', 'exported'
+let dateFormat = 'mdy'; // 'mdy' or 'dmy'
+let timeFormat = '12h'; // '12h' or '24h'
 
 // Export timestamp storage helpers
 async function loadExportTimestamps() {
@@ -76,6 +78,30 @@ async function saveExportTimestamps(conversationIds) {
   });
 }
 
+async function loadDateTimePrefs() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(['dateFormat', 'timeFormat'], (result) => {
+      dateFormat = result.dateFormat || 'mdy';
+      timeFormat = result.timeFormat || '12h';
+      resolve();
+    });
+  });
+}
+
+function formatDate(dt) {
+  const m = dt.getMonth() + 1;
+  const d = dt.getDate();
+  const y = dt.getFullYear();
+  return dateFormat === 'dmy' ? `${d}/${m}/${y}` : `${m}/${d}/${y}`;
+}
+
+function formatTime(dt) {
+  if (timeFormat === '24h') {
+    return dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+  }
+  return dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+}
+
 function isNewOrUpdated(conv) {
   const lastExport = exportTimestamps[conv.uuid];
   if (!lastExport) return true; // Never exported
@@ -100,6 +126,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const loadingStart = Date.now();
   await loadOrgId();
   await loadExportTimestamps();
+  await loadDateTimePrefs();
   const elapsed = Date.now() - loadingStart;
   if (elapsed < 1000) await new Promise(r => setTimeout(r, 1000 - elapsed));
   const loadingText = document.getElementById('loadingText');
@@ -433,10 +460,10 @@ function displayConversations() {
   filteredConversations.forEach((conv, index) => {
     const updatedDt = new Date(conv.updated_at);
     const createdDt = new Date(conv.created_at);
-    const updatedDate = updatedDt.toLocaleDateString();
-    const updatedTime = updatedDt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const createdDate = createdDt.toLocaleDateString();
-    const createdTime = createdDt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const updatedDate = formatDate(updatedDt);
+    const updatedTime = formatTime(updatedDt);
+    const createdDate = formatDate(createdDt);
+    const createdTime = formatTime(createdDt);
     const modelBadgeClass = getModelBadgeClass(conv.model);
     const projectName = getProjectName(conv);
 
@@ -1090,6 +1117,9 @@ function setupEventListeners() {
       // Update theme label
       const theme = document.documentElement.getAttribute('data-theme') || 'dark';
       document.getElementById('themeLabel').textContent = theme === 'dark' ? 'Dark' : 'Light';
+      // Update datetime format labels
+      document.getElementById('dateFormatLabel').textContent = dateFormat === 'mdy' ? 'M/D/Y' : 'D/M/Y';
+      document.getElementById('timeFormatLabel').textContent = timeFormat;
     }
   });
 
@@ -1133,6 +1163,22 @@ function setupEventListeners() {
     updateStats();
     settingsDropdown.classList.remove('open');
     showToast('All conversations marked as new');
+  });
+
+  // Date format toggle
+  document.getElementById('toggleDateFormat').addEventListener('click', () => {
+    dateFormat = dateFormat === 'mdy' ? 'dmy' : 'mdy';
+    document.getElementById('dateFormatLabel').textContent = dateFormat === 'mdy' ? 'M/D/Y' : 'D/M/Y';
+    chrome.storage.local.set({ dateFormat });
+    displayConversations();
+  });
+
+  // Time format toggle
+  document.getElementById('toggleTimeFormat').addEventListener('click', () => {
+    timeFormat = timeFormat === '12h' ? '24h' : '12h';
+    document.getElementById('timeFormatLabel').textContent = timeFormat;
+    chrome.storage.local.set({ timeFormat });
+    displayConversations();
   });
 
   // Test connection
