@@ -150,6 +150,10 @@
 - **Model name/ID toggle in table**
   - Click on model name to toggle between display name and model ID
 
+- **Artifact indicators in browse table**
+  - Show icon next to conversation name if it contains artifacts
+  - Add filter options in funnel dropdown: with artifacts / without artifacts
+
 - **Regex search**
   - Option to use regex patterns in the search bar
   - Toggle between plain text and regex mode
