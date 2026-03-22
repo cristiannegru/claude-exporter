@@ -727,6 +727,10 @@
 
     <div class="controls">
       <div class="search-group">
+        <div class="search-box" id="searchBox">
+          <input type="text" id="searchInput" placeholder="Search conversations by name...">
+          <button class="clear-btn" id="clearSearch">✕</button>
+        </div>
         <div class="filter-wrapper">
           <button class="filter-btn" id="filterBtn" title="Filter conversations">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" width="18" height="18">
@@ -738,10 +742,6 @@
             <div class="filter-option" data-value="new">New / Updated</div>
             <div class="filter-option" data-value="exported">Previously exported</div>
           </div>
-        </div>
-        <div class="search-box" id="searchBox">
-          <input type="text" id="searchInput" placeholder="Search conversations by name...">
-          <button class="clear-btn" id="clearSearch">✕</button>
         </div>
       </div>
 
