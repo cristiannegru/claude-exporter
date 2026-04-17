@@ -20,48 +20,13 @@ A browser extension for Chrome and Firefox that allows you to export your Claude
 - ☀️ **Light/Dark Mode** - Toggle between color schemes
 
 ---
-### Installation (Recommended)
-The simplest way to install Claude Exporter and receive automatic updates is through your browser's official Extensions page.
+### Installation
 
-#### Chrome and Chromium-based browsers
-Available on the [Chrome Web Store](https://chromewebstore.google.com/detail/claude-exporter/niicpkfpebcmikhdmmjnlamoljlabkni?hl=en)
+Install from:
+- [Chrome Web Store](https://chromewebstore.google.com/detail/claude-exporter/niicpkfpebcmikhdmmjnlamoljlabkni?hl=en)
+- [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/claude-exporter/)
 
-#### Firefox
-Available as a [Firefox extension](https://addons.mozilla.org/en-US/firefox/addon/claude-exporter/)
-
----
-### Manual Installation
-
-#### Chrome and Chromium-based browsers
-1. Download the `claude-exporter-chrome-vX.X.X.zip` from the [Releases page](https://github.com/agoramachina/claude-exporter/releases)
-2. Extract the zip into a safe folder (this will be the permanent location - don't move or delete it)
-3. Open Chrome and navigate to `chrome://extensions/`
-4. Enable **Developer mode** (toggle in top right)
-5. Click **Load unpacked** and select the extracted `claude-exporter-chrome` folder
-6. Done! Proceed to [Configuration](#Configuration)
-
-#### Firefox
-1. Download the latest `.xpi` file from the [Releases page](https://github.com/agoramachina/claude-exporter/releases)
-2. Drag and drop the `.xpi` file into Firefox
-3. Click **Add** when Firefox asks for permission
-4. Done! Proceed to [Configuration](#Configuration)
-
-**For detailed installation instructions, troubleshooting, and installing from source**, see [INSTALL.md](INSTALL.md).
-
----
-### Configuration
-
-After installing the extension in either browser:
-1. Click the extension icon in your browser toolbar
-2. You'll see a notice about configuring your Organization ID
-3. Click "Click here to set it up" (or right-click the extension icon → Options)
-4. In a new tab, go to `https://claude.ai/settings/account`
-5. Copy your Organization ID from the URL
-   - It should be in this format: `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
-6. Return to the extension options and paste the Organization ID
-7. Click **Save**
-8. Click **Test Connection** to verify it works
-9. You should see a success message if everything is configured correctly!
+For manual installation, installing from source, or troubleshooting, see [INSTALL.md](INSTALL.md).
 
 ---
 ### Usage
@@ -112,7 +77,7 @@ After installing the extension in either browser:
 ### Troubleshooting
 
 #### "Organization ID not configured"
-- Follow the setup steps in the Configuration section
+- Follow the setup steps in [INSTALL.md](INSTALL.md#configuration)
 - Make sure you're copying the complete UUID from the URL
 
 #### "Not authenticated" error
