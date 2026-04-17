@@ -121,7 +121,7 @@ Feel free to submit issues or pull requests if you find bugs or have suggestions
 ### Acknowledgments
 
 - **Original Project**: Forked from [socketteer/Claude-Conversation-Exporter](https://github.com/socketteer/Claude-Conversation-Exporter)
-- **Code Development**: Written in collaboration with Claude Sonnet 4.5 and Opus 4.6
+- **Code Development**: Written in collaboration with Claude Code
 - **ZIP Library**: Uses [JSZip](https://stuk.github.io/jszip/) for creating ZIP archives
 
 ---

@@ -116,6 +116,10 @@
   - Show users a summary of changes on version bump
   - Surfaces UI updates so changes aren't jarring
 
+- **Elaborate README acknowledgments** (low priority)
+  - Expand "Written in collaboration with Claude Code" with more detail
+  - Could include model history, specific contributions, or workflow notes
+
 - **Branch export options**
   - Add option to export all branches vs. only current branch
   - Currently markdown/text only export current branch, JSON exports all
