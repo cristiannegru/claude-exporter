@@ -9,6 +9,8 @@
   - Test connection
 - Settings gear icon in popup header (opens options page)
 
+_Published_
+
 ## [1.8.13]
 
 - Track export timestamps per conversation in chrome.storage.local
