@@ -873,6 +873,9 @@ async function exportAllFiltered() {
   const progressBar = document.getElementById('progressBar');
   const progressText = document.getElementById('progressText');
   const progressStats = document.getElementById('progressStats');
+  progressBar.style.width = '0%';
+  progressStats.textContent = '';
+  progressText.textContent = 'Preparing export...';
   progressModal.style.display = 'block';
 
   let cancelExport = false;
