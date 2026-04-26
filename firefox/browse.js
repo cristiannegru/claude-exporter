@@ -278,7 +278,7 @@ function formatModelName(model) {
 
   // New format: claude-{type}-{major}[-{minor}][-{date}]
   // e.g., claude-sonnet-4-6, claude-sonnet-4-5-20250929, claude-opus-5-20260101
-  const newFormatMatch = model.match(/^claude-(sonnet|opus|haiku)-(\d+)(?:-(\d+))?(?:-\d{8})?$/i);
+  const newFormatMatch = model.match(/^claude-(sonnet|opus|haiku)-(\d+)(?:-(\d{1,2}))?(?:-\d{8})?$/i);
   if (newFormatMatch) {
     const [, modelType, major, minor] = newFormatMatch;
     const modelName = modelType.charAt(0).toUpperCase() + modelType.slice(1);
