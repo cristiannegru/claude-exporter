@@ -5,6 +5,7 @@
 - Fixed Model column header alignment with badge text on browse page
 - Single-conversation "Export All" no longer wraps the file in a ZIP
 - Progress modal now resets bar/stats/text on each open instead of carrying over from the previous run
+- Artifact extraction now filters by `tool_use.name === 'artifacts'` so bash/web_search/repl tool calls can't slip through as fake artifacts
 
 ## [1.9.0]
 

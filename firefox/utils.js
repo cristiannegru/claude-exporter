@@ -225,7 +225,8 @@ function extractArtifactsFromMessage(message) {
   if (message.content && Array.isArray(message.content)) {
     for (const content of message.content) {
       // NEW FORMAT: tool_use with display_content
-      if (content.type === 'tool_use' && content.display_content) {
+      // Only the `artifacts` tool produces real artifacts — bash, web_search, repl, etc. are filtered out
+      if (content.type === 'tool_use' && content.name === 'artifacts' && content.display_content) {
         const displayContent = content.display_content;
 
         // Check for code_block format (newer artifact format)

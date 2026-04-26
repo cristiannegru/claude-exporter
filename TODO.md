@@ -111,15 +111,20 @@
   - Display current conversation being processed
   - Provide visual feedback during large exports
 
+- **Elaborate README acknowledgments** (v1.9.1)
+  - Expand "Written in collaboration with Claude Code" with more detail
+
 ## Pending 🔄
 
-### High Priority
+### Critical Priority 🔴
+
+### High Priority 🟠
 
 - **Improve model badge color contrast in light mode**
   - Model name badges (Sonnet/Opus/Haiku) may be hard to read in light theme
   - Increase text/background contrast for accessibility
 
-### Medium Priority
+### Medium Priority 🟡
 
 - **Artifact indicators in browse table**
   - Show icon next to conversation name if it contains artifacts
@@ -159,36 +164,31 @@
 - **Google Drive integration**
   - Link/sync exports to Google Drive
 
-- **Remove claude.ai tab dependency** (low priority)
+- **Remove claude.ai tab dependency**
   - Use `chrome.cookies` API to read claude.ai session cookies directly
   - Make API calls from background worker / browse page without needing a relay tab
   - Would allow browse page and auto-detection to work without an open claude.ai tab
   - Requires adding `cookies` permission to manifest
 
+- **Advanced settings menu**
+  - *Custom date/time format*
+    - Custom format string (e.g. `%d/%m/%Y %H:%M`)
+    - Toggle time display on/off
 
-### Low Priority
+### Low Priority 🟢
 
-- **Click org ID to copy to clipboard** (low priority)
+- **Click org ID to copy to clipboard**
   - In settings dropdown, clicking org ID copies it with visual feedback (tooltip/toast)
 
 - **In-popup changelog / "What's new"**
-  - Show users a summary of changes on version bump
+  - Link to summary of changes on version bump
   - Surfaces UI updates so changes aren't jarring
-
-- **Elaborate README acknowledgments**
-  - Expand "Written in collaboration with Claude Code" with more detail
-  - Could include model history, specific contributions, or workflow notes
   
 - **Branch export options**
   - Add option to export all branches vs. only current branch
   - Currently markdown/text only export current branch, JSON exports all
   - Let users choose their preference for all formats
   - Useful for preserving alternate conversation paths
-
-- **Advanced date/time format settings**
-  - Custom format string (e.g. `%d/%m/%Y %H:%M`)
-  - Toggle time display on/off
-  - Other advanced formatting options beyond M/D/Y, D/M/Y, 12h/24h
 
 - **Model name/ID toggle in table**
   - Click on model name to toggle between display name and model ID
@@ -201,19 +201,12 @@
   - Add a help/getting started option to the settings dropdown
   - Quick overview of features, export options, keyboard shortcuts
 
----
-
-- **Filter bash tool uses from artifact extraction**
-  - Sometimes simple bash calls create artifact.sh files
-  - Need to better distinguish real artifacts from tool use results
-  - Check for additional indicators beyond just `filename` field
-
 
 ## Bugs 🐛
 
 (none currently open)
 
-## Current Version: 1.9.0
+## Current Version: 1.9.1
 
 ## Notes
 
