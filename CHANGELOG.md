@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.9.1]
+
+- Fixed Model column header alignment with badge text on browse page
+- Single-conversation "Export All" no longer wraps the file in a ZIP
+- Progress modal now resets bar/stats/text on each open instead of carrying over from the previous run
+
 ## [1.9.0]
 
 - Settings dropdown menu on browse page (replaces theme toggle button)

@@ -106,75 +106,46 @@
   - Theme toggle, org ID display, mark all exported/new, test connection
   - Gear icon in popup header opens options page
 
+- **Export progress indicator on browse page** (v1.9.1)
+  - Show progress bar when exporting from browse view
+  - Display current conversation being processed
+  - Provide visual feedback during large exports
+
 ## Pending 🔄
 
-- **Contact dev / feedback link** (medium priority)
-  - Add to settings dropdown on browse page
-  - Way for users to reach out (feedback, bug reports)
+### High Priority
 
-- **In-popup changelog / "What's new"** (low priority)
-  - Show users a summary of changes on version bump
-  - Surfaces UI updates so changes aren't jarring
+- **Improve model badge color contrast in light mode**
+  - Model name badges (Sonnet/Opus/Haiku) may be hard to read in light theme
+  - Increase text/background contrast for accessibility
 
-- **Elaborate README acknowledgments** (low priority)
-  - Expand "Written in collaboration with Claude Code" with more detail
-  - Could include model history, specific contributions, or workflow notes
+### Medium Priority
 
-- **Branch export options**
-  - Add option to export all branches vs. only current branch
-  - Currently markdown/text only export current branch, JSON exports all
-  - Let users choose their preference for all formats
-  - Useful for preserving alternate conversation paths
-
-- **Claude Code export**
-  - Support exporting Claude Code conversations
-  - Handle code-specific content and artifacts
-
-- **PDF export for artifacts**
-  - Generate PDF versions of artifacts
-  - Useful for documentation and sharing
-
-- **Filter bash tool uses from artifact extraction**
-  - Sometimes simple bash calls create artifact.sh files
-  - Need to better distinguish real artifacts from tool use results
-  - Check for additional indicators beyond just `filename` field
-
+- **Artifact indicators in browse table**
+  - Show icon next to conversation name if it contains artifacts
+  - Add filter options in funnel dropdown: with artifacts / without artifacts
+  
 - **Artifact search/filter in browse view**
   - Add ability to search or filter conversations by artifact content
   - Filter by artifact filename, type, or whether artifacts exist
   - Helps find specific artifacts across all conversations
 
-- **Export progress indicator on browse page**
-  - Show progress bar when exporting from browse view
-  - Display current conversation being processed
-  - Provide visual feedback during large exports
+- **Contact dev / feedback link**
+  - Add to settings dropdown on browse page
+  - Way for users to reach out (feedback, bug reports)
+  
+- **PDF export for artifacts**
+  - Generate PDF versions of artifacts
+  - Useful for documentation and sharing
 
 - **Memory export (global and project-specific)**
   - Export custom instructions and memory from Claude.ai
   - Support both global/account-level memory and project-specific memory
   - Allow backup and archival of configured AI behavior and context
 
-- **Advanced date/time format settings**
-  - Custom format string (e.g. `%d/%m/%Y %H:%M`)
-  - Toggle time display on/off
-  - Other advanced formatting options beyond M/D/Y, D/M/Y, 12h/24h
-
-- **Model name/ID toggle in table**
-  - Click on model name to toggle between display name and model ID
-
-- **Artifact indicators in browse table**
-  - Show icon next to conversation name if it contains artifacts
-  - Add filter options in funnel dropdown: with artifacts / without artifacts
-
-- **Regex search**
-  - Option to use regex patterns in the search bar
-  - Toggle between plain text and regex mode
-
-- **Google Drive integration**
-  - Link/sync exports to Google Drive
-
-- **UI cleanup: Remove redundant "View" button**
-  - Chat name already links to conversation, "View" button may be unnecessary
+- **Claude Code export**
+  - Support exporting Claude Code conversations
+  - Handle code-specific content and artifacts
 
 - **Local sync / export folder mode**
   - User defines a local export directory
@@ -185,28 +156,58 @@
   - Would need File System Access API or similar for folder read/write
   - Consider: incremental sync (only export changed conversations) vs full re-export
 
-
-- **Help / tutorial in settings menu**
-  - Add a help/getting started option to the settings dropdown
-  - Quick overview of features, export options, keyboard shortcuts
-
-- **Click org ID to copy to clipboard**
-  - In settings dropdown, clicking org ID copies it with visual feedback (tooltip/toast)
-
-- **Improve model badge color contrast in light mode** (low priority)
-  - Model name badges (Sonnet/Opus/Haiku) may be hard to read in light theme
-  - Increase text/background contrast for accessibility
-
-- **Localization / i18n** (low priority)
-  - Detect user's browser language and display UI in their language
-  - Use Chrome/Firefox i18n APIs (`chrome.i18n`, `_locales/` folder)
-  - Start with English, add community-contributed translations
+- **Google Drive integration**
+  - Link/sync exports to Google Drive
 
 - **Remove claude.ai tab dependency** (low priority)
   - Use `chrome.cookies` API to read claude.ai session cookies directly
   - Make API calls from background worker / browse page without needing a relay tab
   - Would allow browse page and auto-detection to work without an open claude.ai tab
   - Requires adding `cookies` permission to manifest
+
+
+### Low Priority
+
+- **Click org ID to copy to clipboard** (low priority)
+  - In settings dropdown, clicking org ID copies it with visual feedback (tooltip/toast)
+
+- **In-popup changelog / "What's new"**
+  - Show users a summary of changes on version bump
+  - Surfaces UI updates so changes aren't jarring
+
+- **Elaborate README acknowledgments**
+  - Expand "Written in collaboration with Claude Code" with more detail
+  - Could include model history, specific contributions, or workflow notes
+  
+- **Branch export options**
+  - Add option to export all branches vs. only current branch
+  - Currently markdown/text only export current branch, JSON exports all
+  - Let users choose their preference for all formats
+  - Useful for preserving alternate conversation paths
+
+- **Advanced date/time format settings**
+  - Custom format string (e.g. `%d/%m/%Y %H:%M`)
+  - Toggle time display on/off
+  - Other advanced formatting options beyond M/D/Y, D/M/Y, 12h/24h
+
+- **Model name/ID toggle in table**
+  - Click on model name to toggle between display name and model ID
+
+- **Regex search**
+  - Option to use regex patterns in the search bar
+  - Toggle between plain text and regex mode
+
+- **Help / tutorial in settings menu** (low priority)
+  - Add a help/getting started option to the settings dropdown
+  - Quick overview of features, export options, keyboard shortcuts
+
+---
+
+- **Filter bash tool uses from artifact extraction**
+  - Sometimes simple bash calls create artifact.sh files
+  - Need to better distinguish real artifacts from tool use results
+  - Check for additional indicators beyond just `filename` field
+
 
 ## Bugs 🐛
 
