@@ -127,6 +127,7 @@
 - **Track model changes per conversation**
   - `conversation.model` from the API is the *current* model only — when chats get bounced (deprecation, guardrails kicking to Sonnet 4, etc.) the original model is lost
   - Symptom: chats created before Sonnet 4.5 existed now show "Sonnet 4.5" because that's their current default
+  - 
   - **API does NOT preserve per-message model data** — confirmed by inspecting an exported JSON; messages have no `model` field. Anthropic doesn't track this server-side (in this endpoint at least).
   - Approach: snapshot tracking on our side
     - On every export, record `{conversationId, model, timestamp}` to `chrome.storage.local`
@@ -197,7 +198,13 @@
   - Would allow browse page and auto-detection to work without an open claude.ai tab
   - Requires adding `cookies` permission to manifest
 
+- **Robust filter**
+  - Filter by project, model, artifact
+
 - **Advanced settings menu**
+  - *Language settings*
+  - *Custom CSS*
+  - *Regex mode*
   - *Custom date/time format*
     - Custom format string (e.g. `%d/%m/%Y %H:%M`)
     - Toggle time display on/off
@@ -230,6 +237,9 @@
   - Add a help/getting started option to the settings dropdown
   - Quick overview of features, export options, keyboard shortcuts
 
+- **Minor UI improvements**
+  - Export progress spinner
+  - Test connection spinner
 
 ## Bugs 🐛
 
