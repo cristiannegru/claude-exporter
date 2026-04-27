@@ -11,6 +11,8 @@
 - Light mode contrast pass: deeper model badge colors, View button border, refined palette aligned with popup
 - Click the org ID row in the browse settings dropdown to copy it to the clipboard
 
+_Published_
+
 ## [1.9.0]
 
 - Settings dropdown menu on browse page (replaces theme toggle button)
