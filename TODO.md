@@ -114,6 +114,10 @@
 - **Elaborate README acknowledgments** (v1.9.1)
   - Expand "Written in collaboration with Claude Code" with more detail
 
+- **Click org ID to copy to clipboard** (v1.9.1)
+  - Click the org ID row in the browse settings dropdown to copy it
+  - Toast confirms "Org ID copied to clipboard"
+
 ## Pending 🔄
 
 ### Critical Priority 🔴
@@ -204,9 +208,6 @@
   - Cancel button currently hides the modal immediately, but in-flight batch fetches still run in the background until they finish
   - Wire up an `AbortController` so the actual `fetch()` calls and ZIP work get aborted on cancel
   - Mostly cosmetic — saves a few seconds of wasted bandwidth + CPU per cancel
-
-- **Click org ID to copy to clipboard**
-  - In settings dropdown, clicking org ID copies it with visual feedback (tooltip/toast)
 
 - **In-popup changelog / "What's new"**
   - Link to summary of changes on version bump

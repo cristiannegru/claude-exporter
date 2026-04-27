@@ -1162,6 +1162,21 @@ function setupEventListeners() {
     document.getElementById('themeLabel').textContent = theme === 'dark' ? 'Dark' : 'Light';
   });
 
+  // Click org ID row to copy full ID to clipboard
+  document.getElementById('settingsOrgId').addEventListener('click', async () => {
+    if (!orgId) {
+      showToast('No org ID set', true);
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(orgId);
+      showToast('Org ID copied to clipboard');
+    } catch (e) {
+      showToast('Failed to copy org ID', true);
+    }
+    settingsDropdown.classList.remove('open');
+  });
+
   // Edit org ID — open options page
   document.getElementById('editOrgId').addEventListener('click', () => {
     chrome.runtime.openOptionsPage();
