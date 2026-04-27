@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.9.1]
+
+- Fixed Model column header alignment with badge text on browse page
+- Single-conversation "Export All" no longer wraps the file in a ZIP
+- Progress modal now resets bar/stats/text on each open instead of carrying over from the previous run
+- Progress modal closes immediately on Cancel instead of waiting for the in-flight batch
+- Artifact extraction now filters by `tool_use.name === 'artifacts'` so bash/web_search/repl tool calls can't slip through as fake artifacts
+- Fixed model name display when version has no minor (e.g. `claude-opus-4-20250514` now renders as "Claude Opus 4" instead of "Claude Opus 4.20250514")
+- Light mode contrast pass: deeper model badge colors, View button border, refined palette aligned with popup
+- Click the org ID row in the browse settings dropdown to copy it to the clipboard
+
+_Published_
+
 ## [1.9.0]
 
 - Settings dropdown menu on browse page (replaces theme toggle button)

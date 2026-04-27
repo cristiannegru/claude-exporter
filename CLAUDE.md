@@ -82,6 +82,15 @@ When re-injecting into already-open tabs (on install/update), background.js must
 ### Multi-file exports must always be ZIPped
 Any export producing more than one file should always create a ZIP — never trigger individual browser downloads.
 
+### Manifest name differs by branch
+
+`"name"` in BOTH manifests must be:
+
+- `"Claude Exporter"` on the `main` branch (released version)
+- `"Claude Exporter Beta"` on the `testing` branch (so the user can tell at a glance which build is loaded)
+
+When merging `testing` → `main` for a release, flip both manifest names to drop "Beta" as part of the merge.
+
 ## Architecture Notes
 
 ### Content Script Injection

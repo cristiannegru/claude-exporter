@@ -278,7 +278,7 @@ function formatModelName(model) {
 
   // New format: claude-{type}-{major}[-{minor}][-{date}]
   // e.g., claude-sonnet-4-6, claude-sonnet-4-5-20250929, claude-opus-5-20260101
-  const newFormatMatch = model.match(/^claude-(sonnet|opus|haiku)-(\d+)(?:-(\d+))?(?:-\d{8})?$/i);
+  const newFormatMatch = model.match(/^claude-(sonnet|opus|haiku)-(\d+)(?:-(\d{1,2}))?(?:-\d{8})?$/i);
   if (newFormatMatch) {
     const [, modelType, major, minor] = newFormatMatch;
     const modelName = modelType.charAt(0).toUpperCase() + modelType.slice(1);
@@ -845,18 +845,45 @@ async function exportAllFiltered() {
     conversationsToExport = filteredConversations;
   }
 
+  // Single conversation: delegate to exportConversation so we skip the ZIP
+  // when the output is a single file (artifact-extraction paths still ZIP there)
+  if (conversationsToExport.length === 1) {
+    const conv = conversationsToExport[0];
+    const progressModal = document.getElementById('progressModal');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const progressStats = document.getElementById('progressStats');
+    progressModal.style.display = 'block';
+    progressText.textContent = `Exporting ${conv.name}...`;
+    progressBar.style.width = '0%';
+    progressStats.textContent = '';
+    try {
+      await exportConversation(conv.uuid, conv.name);
+      progressBar.style.width = '100%';
+    } finally {
+      progressModal.style.display = 'none';
+      button.disabled = false;
+      button.textContent = originalButtonText;
+    }
+    return;
+  }
+
   // Show progress modal
   const progressModal = document.getElementById('progressModal');
   const progressBar = document.getElementById('progressBar');
   const progressText = document.getElementById('progressText');
   const progressStats = document.getElementById('progressStats');
+  progressBar.style.width = '0%';
+  progressStats.textContent = '';
+  progressText.textContent = 'Preparing export...';
   progressModal.style.display = 'block';
 
   let cancelExport = false;
   const cancelButton = document.getElementById('cancelExport');
   cancelButton.onclick = () => {
     cancelExport = true;
-    progressText.textContent = 'Cancelling...';
+    progressModal.style.display = 'none';
+    showToast('Export cancelled', true);
   };
 
   try {
@@ -987,11 +1014,7 @@ async function exportAllFiltered() {
       }
     }
     
-    if (cancelExport) {
-      progressModal.style.display = 'none';
-      showToast('Export cancelled', true);
-      return;
-    }
+    if (cancelExport) return;
 
     // Generate and download the ZIP file
     progressText.textContent = 'Creating ZIP file...';
@@ -1137,6 +1160,21 @@ function setupEventListeners() {
     toggleTheme();
     const theme = document.documentElement.getAttribute('data-theme') || 'dark';
     document.getElementById('themeLabel').textContent = theme === 'dark' ? 'Dark' : 'Light';
+  });
+
+  // Click org ID row to copy full ID to clipboard
+  document.getElementById('settingsOrgId').addEventListener('click', async () => {
+    if (!orgId) {
+      showToast('No org ID set', true);
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(orgId);
+      showToast('Org ID copied to clipboard');
+    } catch (e) {
+      showToast('Failed to copy org ID', true);
+    }
+    settingsDropdown.classList.remove('open');
   });
 
   // Edit org ID — open options page
