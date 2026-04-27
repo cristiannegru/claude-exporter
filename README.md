@@ -94,11 +94,13 @@ See [INSTALL.md](INSTALL.md) for installation instructions (browser stores, manu
 ---
 ### Known Limitations
 
+- Rate limiting: The extension processes conversations in small batches to avoid overwhelming the API
+- Using a VPN may return a 403 error when trying to connect to the Claude API
 - Plaintext and markdown formats only export the currently selected branch in conversations with multiple branches
 - Large bulk exports may take several minutes
 - Some special content types (like artifacts) may not export perfectly
-- Rate limiting: The extension processes conversations in small batches to avoid overwhelming the API
-- Using a VPN may return a 403 error when trying to connect to the Claude API
+- API does not preserve per-message model data
+  - `conversation.model` from the API is the *current* model only — when chats get bounced (deprecation, guardrails kicking to Sonnet 4, etc.) the original model is lost
 
 ---
 ### Privacy & Security

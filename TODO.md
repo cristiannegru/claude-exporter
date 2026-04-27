@@ -244,12 +244,3 @@
 ## Bugs 🐛
 
 (none currently open)
-
-## Current Version: 1.9.1
-
-## Notes
-
-- Version bumping helps track changes and catch branch mix-ups
-- Projects fully implemented and functional
-- All artifact export features are functional and tested
-- Flat-only mode makes it easy to get all artifacts in one searchable folder
