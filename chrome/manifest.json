@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "Claude Exporter Beta",
+    "name": "Claude Exporter",
     "version": "1.9.1",
     "description": "Export conversations and artifacts from Claude.ai",
       "permissions": [
